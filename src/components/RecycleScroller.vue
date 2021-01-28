@@ -533,8 +533,7 @@ export default {
         }
       }
 
-      const beforeSlotSize = this.$refs.before ? this.$refs.before[isVertical ? 'offsetHeight' : 'offsetWidth'] : 0
-      scrollState.start -= beforeSlotSize
+      scrollState.start -= this.getBeforeSlotSize()
 
       return scrollState
     },
@@ -573,7 +572,14 @@ export default {
       } else {
         scroll = index * this.itemSize
       }
+
+      scroll += this.getBeforeSlotSize()
+
       this.scrollToPosition(scroll)
+    },
+
+    getBeforeSlotSize () {
+      return this.$refs.before ? this.$refs.before[this.direction === 'vertical' ? 'offsetHeight' : 'offsetWidth'] : 0
     },
 
     scrollToPosition (position) {

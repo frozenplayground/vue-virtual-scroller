@@ -648,8 +648,7 @@ var script = {
         };
       }
 
-      var beforeSlotSize = this.$refs.before ? this.$refs.before[isVertical ? 'offsetHeight' : 'offsetWidth'] : 0;
-      scrollState.start -= beforeSlotSize;
+      scrollState.start -= this.getBeforeSlotSize();
       return scrollState;
     },
     applyPageMode: function applyPageMode() {
@@ -684,7 +683,11 @@ var script = {
         scroll = index * this.itemSize;
       }
 
+      scroll += this.getBeforeSlotSize();
       this.scrollToPosition(scroll);
+    },
+    getBeforeSlotSize: function getBeforeSlotSize() {
+      return this.$refs.before ? this.$refs.before[this.direction === 'vertical' ? 'offsetHeight' : 'offsetWidth'] : 0;
     },
     scrollToPosition: function scrollToPosition(position) {
       if (this.direction === 'vertical') {
