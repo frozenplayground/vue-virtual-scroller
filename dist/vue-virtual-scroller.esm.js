@@ -77,7 +77,7 @@ function _unsupportedIterableToArray(o, minLen) {
   if (typeof o === "string") return _arrayLikeToArray(o, minLen);
   var n = Object.prototype.toString.call(o).slice(8, -1);
   if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(n);
+  if (n === "Map" || n === "Set") return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
 }
 
@@ -89,9 +89,12 @@ function _arrayLikeToArray(arr, len) {
   return arr2;
 }
 
-function _createForOfIteratorHelper(o) {
+function _createForOfIteratorHelper(o, allowArrayLike) {
+  var it;
+
   if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-    if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
       var i = 0;
 
       var F = function () {};
@@ -117,8 +120,7 @@ function _createForOfIteratorHelper(o) {
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  var it,
-      normalCompletion = true,
+  var normalCompletion = true,
       didErr = false,
       err;
   return {
@@ -189,7 +191,7 @@ var script = {
   directives: {
     ObserveVisibility: ObserveVisibility
   },
-  props: _objectSpread2({}, props, {
+  props: _objectSpread2(_objectSpread2({}, props), {}, {
     itemSize: {
       type: Number,
       default: null
@@ -646,6 +648,8 @@ var script = {
         };
       }
 
+      var beforeSlotSize = this.$refs.before ? this.$refs.before[isVertical ? 'offsetHeight' : 'offsetWidth'] : 0;
+      scrollState.start -= beforeSlotSize;
       return scrollState;
     },
     applyPageMode: function applyPageMode() {
@@ -818,7 +822,7 @@ var __vue_render__ = function() {
       _vm.$slots.before
         ? _c(
             "div",
-            { staticClass: "vue-recycle-scroller__slot" },
+            { ref: "before", staticClass: "vue-recycle-scroller__slot" },
             [_vm._t("before")],
             2
           )
@@ -907,7 +911,7 @@ __vue_render__._withStripped = true;
   
 
   
-  const __vue_component__ = normalizeComponent(
+  const __vue_component__ = /*#__PURE__*/normalizeComponent(
     { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
     __vue_inject_styles__,
     __vue_script__,
@@ -959,7 +963,7 @@ var script$1 = {
       vscrollResizeObserver: this.$_resizeObserver
     };
   },
-  props: _objectSpread2({}, props, {
+  props: _objectSpread2(_objectSpread2({}, props), {}, {
     minItemSize: {
       type: [Number, String],
       required: true
@@ -1183,7 +1187,7 @@ __vue_render__$1._withStripped = true;
   
 
   
-  const __vue_component__$1 = normalizeComponent(
+  const __vue_component__$1 = /*#__PURE__*/normalizeComponent(
     { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
     __vue_inject_styles__$1,
     __vue_script__$1,
@@ -1423,7 +1427,7 @@ const __vue_script__$2 = script$2;
   
 
   
-  const __vue_component__$2 = normalizeComponent(
+  const __vue_component__$2 = /*#__PURE__*/normalizeComponent(
     {},
     __vue_inject_styles__$2,
     __vue_script__$2,
